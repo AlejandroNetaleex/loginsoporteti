@@ -11,14 +11,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #000;
+            color: #fff;
             margin: 0;
         }
         .login-container {
-            background-color: #fff;
+            background-color: #222;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
             width: 320px;
             text-align: center;
         }
@@ -74,8 +75,10 @@
 </div>
 
 <script>
-    const validUsername = "giftzin";
-    const validPassword = "282000";
+    const validUsers = [
+        { username: "isa", password: "282000" },
+        { username: "ale", password: "41590902" }
+    ];
     let attempts = 0;
     let blockTime = null;
 
@@ -91,7 +94,9 @@
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        if (username === validUsername && password === validPassword) {
+        const isValidUser = validUsers.some(user => user.username === username && user.password === password);
+
+        if (isValidUser) {
             window.location.href = "https://alejandronetaleex.github.io/soportetigiftzin/";
         } else {
             attempts++;
@@ -101,6 +106,8 @@
                 document.getElementById("loginButton").disabled = true;
                 setTimeout(function() {
                     document.getElementById("loginButton").disabled = false;
+                    document.getElementById("errorMessage").textContent = "";
+                    attempts = 0;
                 }, 3 * 60 * 1000);
             } else {
                 document.getElementById("errorMessage").textContent = "Usuario o contraseña incorrectos. Intentos restantes: " + (3 - attempts);
