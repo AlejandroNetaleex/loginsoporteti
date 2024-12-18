@@ -30,7 +30,7 @@
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
             width: 320px;
             text-align: center;
-            margin: 50px 0 20px 0;
+            margin: 150px 0 100px 0; /* Espacio superior y debajo */
         }
         .login-container.light-mode {
             background-color: #f4f4f4;
@@ -71,6 +71,11 @@
             font-size: 14px;
             margin-top: 10px;
         }
+        .welcome-message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: green;
+        }
         .mode-toggle-button {
             width: 100%;
             padding: 12px;
@@ -91,11 +96,19 @@
         .mode-toggle-button:hover {
             opacity: 0.9;
         }
+        .music-player {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
         footer {
             font-size: 12px;
             text-align: center;
             margin-top: auto;
-            margin-bottom: 10px;
+            margin-bottom: 30px; /* Más espacio entre el login y el footer */
         }
     </style>
 </head>
@@ -104,7 +117,7 @@
 <div class="login-container dark-mode">
     <!-- Logo -->
     <img src="logo.webp" alt="Logo Giftzin" class="logo">
-    <h2>SOPORTE TI GIFTZIN</h2>
+    <h2>SOPORTE TECNICO GIFTZIN</h2>
     <form id="loginForm">
         <input type="text" id="username" placeholder="Usuario" required>
         <input type="password" id="password" placeholder="Contraseña" required>
@@ -112,6 +125,14 @@
         <p id="errorMessage" class="error"></p>
     </form>
     <button class="mode-toggle-button" id="modeToggleButton">Cambiar a modo claro</button>
+    <p id="welcomeMessage" class="welcome-message"></p>
+</div>
+
+<div class="music-player">
+    <audio controls autoplay loop>
+        <source src="bachira.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
 </div>
 
 <footer>
@@ -120,8 +141,8 @@
 
 <script>
     const validUsers = [
-        { username: "isa", password: "282000" },
-        { username: "ale", password: "41590902" }
+        { username: "isa", password: "282000", message: "Bienvenida, Ingeniera Isabel. ¡Es un placer tenerte aquí!" },
+        { username: "ale", password: "41590902", message: "Bienvenido, Ingeniero Alejandro. ¡Que tengas un excelente día de trabajo!" }
     ];
     let attempts = 0;
     let blockTime = null;
@@ -129,6 +150,7 @@
     const modeToggleButton = document.getElementById("modeToggleButton");
     const body = document.body;
     const loginContainer = document.querySelector(".login-container");
+    const welcomeMessage = document.getElementById("welcomeMessage");
 
     modeToggleButton.addEventListener("click", () => {
         if (body.classList.contains("dark-mode")) {
@@ -154,10 +176,14 @@
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        const isValidUser = validUsers.some(user => user.username === username && user.password === password);
+        const user = validUsers.find(user => user.username === username && user.password === password);
 
-        if (isValidUser) {
-            window.location.href = "https://alejandronetaleex.github.io/soportetigiftzin/";
+        if (user) {
+            welcomeMessage.textContent = user.message;
+            document.getElementById("errorMessage").textContent = "";
+            setTimeout(() => {
+                window.location.href = "https://alejandronetaleex.github.io/soportetigiftzin/";
+            }, 2000); // Espera 2 segundos antes de redirigir
         } else {
             attempts++;
             if (attempts >= 3) {
